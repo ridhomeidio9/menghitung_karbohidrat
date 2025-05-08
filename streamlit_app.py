@@ -7,10 +7,7 @@ st.title("🍚 Kalkulator Kebutuhan Karbohidrat Harian")
 st.markdown("""
 Hitung kebutuhan karbohidrat harian berdasarkan berat badan, tinggi badan, usia, jenis kelamin, dan tingkat aktivitas Anda.
 
-### 📌 Langkah-langkah:
-1. Masukkan data pribadi
-2. Pilih tingkat aktivitas
-3. Dapatkan estimasi kebutuhan kalori & karbohidrat harian
+💡 Perhitungan menggunakan standar: **55% dari total kalori harian** dialokasikan untuk karbohidrat.
 """)
 
 # --- Input Data Pribadi ---
@@ -44,14 +41,37 @@ activity_multiplier = activity_factors[activity_level]
 total_calories = bmr * activity_multiplier
 
 # --- Karbohidrat ---
-carb_percent = st.slider("Persentase karbohidrat dari total kalori (%)", 45, 65, 55)
+carb_percent = 55  # Tetap, tidak bisa diubah
 carb_grams = (total_calories * (carb_percent / 100)) / 4
 
 # --- Output ---
 st.header("📊 Hasil Perhitungan")
 st.write(f"**BMR Anda:** {bmr:.0f} kkal/hari")
 st.write(f"**Total kalori (termasuk aktivitas):** {total_calories:.0f} kkal/hari")
-st.success(f"🎯 Kebutuhan karbohidrat harian: **{carb_grams:.0f} gram** ({carb_percent}% dari total kalori)")
+st.success(f"🎯 Kebutuhan karbohidrat harian: **{carb_grams:.0f} gram** (berdasarkan 55% dari total kalori)")
+
+# --- Referensi Makanan Tinggi Karbohidrat ---
+st.header("🍞 Rekomendasi Makanan Tinggi Karbohidrat")
+
+st.markdown("""
+Berikut adalah beberapa makanan tinggi karbohidrat yang bisa membantu memenuhi kebutuhan harian Anda:
+
+| Makanan               | Takaran            | Kandungan Karbohidrat |
+|----------------------|--------------------|------------------------|
+| Nasi putih           | 1 centong (150 g)  | ~53 gram               |
+| Kentang rebus        | 1 buah sedang (150 g) | ~30 gram            |
+| Roti tawar           | 2 lembar           | ~30 gram               |
+| Oatmeal              | 1 mangkuk (40 g)    | ~27 gram               |
+| Pisang               | 1 buah sedang      | ~27 gram               |
+| Jagung rebus         | 1 buah sedang      | ~25 gram               |
+| Singkong rebus       | 100 gram           | ~38 gram               |
+| Ubi jalar            | 100 gram           | ~20–25 gram            |
+| Mie instan matang    | 1 porsi (150 g)    | ~40–50 gram            |
+| Gula pasir           | 1 sdm              | ~13 gram               |
+
+💡 Tips: Pilih karbohidrat kompleks seperti oat, ubi, dan jagung untuk energi lebih stabil dan tahan lama.
+""")
 
 st.markdown("---")
-st.caption("Referensi: [Alodokter - Kebutuhan Karbohidrat](https://www.alodokter.com/kebutuhan-karbohidrat-per-hari-dan-cara-memenuhinya)")
+st.caption("Referensi: [Alodokter](https://www.alodokter.com/kebutuhan-karbohidrat-per-hari-dan-cara-memenuhinya) | Data makanan: USDA, FatSecret")
+
