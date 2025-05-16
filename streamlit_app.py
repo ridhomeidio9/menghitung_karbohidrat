@@ -1,77 +1,150 @@
 import streamlit as st
 
-st.set_page_config(page_title="Kalkulator Karbohidrat Harian", layout="centered")
+# Fungsi untuk menambahkan background dan memperjelas font
+def add_background():
+    st.markdown(
+        """
+        <style>
+        /* Background Image + Overlay Transparan */
+        .stApp {
+            background-image: url("https://tribratanews.polri.go.id/web/image/blog.post/61345/image");
+            background-attachment: fixed;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            position: relative;
+        }
 
-st.title("🍚 Kalkulator Kebutuhan Karbohidrat Harian")
+        /* Overlay transparan untuk membuat teks lebih terbaca */
+        .stApp::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.75); /* Putih semi-transparan */
+            z-index: 0;
+        }
 
-st.markdown("""
-Hitung kebutuhan karbohidrat harian berdasarkan berat badan, tinggi badan, usia, jenis kelamin, dan tingkat aktivitas Anda.
+        /* Pastikan semua konten tetap di atas lapisan transparan */
+        .block-container {
+            position: relative;
+            z-index: 1;
+        }
 
-💡 Perhitungan menggunakan standar: **55% dari total kalori harian** dialokasikan untuk karbohidrat.
-""")
+        /* Font styling universal */
+        html, body, [class*="css"] {
+            color: #111111 !important;         /* Warna hitam gelap */
+            font-size: 18px !important;
+            font-weight: 600 !important;
+        }
 
-# --- Input Data Pribadi ---
-st.header("📋 Data Pribadi")
-gender = st.selectbox("Jenis Kelamin", ["Laki-laki", "Perempuan"])
-age = st.number_input("Usia (tahun)", min_value=10, max_value=100, value=25)
-weight = st.number_input("Berat Badan (kg)", min_value=30.0, max_value=200.0, value=60.0)
-height = st.number_input("Tinggi Badan (cm)", min_value=100.0, max_value=250.0, value=170.0)
+        /* Judul */
+        h1, h2, h3, h4 {
+            color: #111111 !important;
+        }
 
-# --- Aktivitas ---
-st.header("🏃 Tingkat Aktivitas")
-activity_level = st.selectbox("Pilih tingkat aktivitas Anda:", [
-    "Rendah (sedentari / jarang olahraga)",
-    "Sedang (olahraga ringan 3–5 hari/minggu)",
-    "Tinggi (latihan intens / pekerjaan fisik berat)"
-])
+        /* Sidebar styling */
+        section[data-testid="stSidebar"] {
+            background-color: rgba(255, 255, 255, 0.85);
+            color: #111111;
+        }
 
-# --- Hitung BMR ---
-if gender == "Laki-laki":
-    bmr = 10 * weight + 6.25 * height - 5 * age + 5
-else:
-    bmr = 10 * weight + 6.25 * height - 5 * age - 161
+        /* Input field styling */
+        .stTextInput > div > input,
+        .stNumberInput input,
+        .stSelectbox div,
+        .stMarkdown p,
+        .stDataFrame {
+            color: #111111 !important;
+            font-size: 18px !important;
+        }
 
-# Faktor aktivitas
-activity_factors = {
-    "Rendah (sedentari / jarang olahraga)": 1.2,
-    "Sedang (olahraga ringan 3–5 hari/minggu)": 1.55,
-    "Tinggi (latihan intens / pekerjaan fisik berat)": 1.9
-}
-activity_multiplier = activity_factors[activity_level]
-total_calories = bmr * activity_multiplier
+        /* Link styling agar tetap terlihat di dark/light mode */
+        a {
+            color: #0a58ca !important;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 
-# --- Karbohidrat ---
-carb_percent = 55  # Tetap, tidak bisa diubah
-carb_grams = (total_calories * (carb_percent / 100)) / 4
+# Halaman 1: Pengertian Karbohidrat
+def halaman_pengertian():
+    add_background()
+    st.title("Pengertian Karbohidrat 🍚")
+    st.markdown("""
+    **Karbohidrat** adalah salah satu jenis zat gizi yang berfungsi sebagai sumber energi utama bagi tubuh. Karbohidrat dapat ditemukan dalam berbagai jenis makanan, terutama yang berasal dari tanaman, seperti beras 🍚, gandum 🌾, kentang 🥔, jagung 🌽, dan buah-buahan 🍎.
 
-# --- Output ---
-st.header("📊 Hasil Perhitungan")
-st.write(f"**BMR Anda:** {bmr:.0f} kkal/hari")
-st.write(f"**Total kalori (termasuk aktivitas):** {total_calories:.0f} kkal/hari")
-st.success(f"🎯 Kebutuhan karbohidrat harian: **{carb_grams:.0f} gram** (berdasarkan 55% dari total kalori)")
+    Karbohidrat dibagi menjadi dua jenis utama, yaitu:
+    1. **Karbohidrat sederhana**: Cepat dicerna dan meningkatkan kadar gula darah dengan cepat. Contohnya adalah gula 🍬, madu 🍯, dan sirup.
+    2. **Karbohidrat kompleks**: Dicerna lebih lambat dan memberikan energi yang bertahan lebih lama. Contohnya nasi 🍚, roti gandum 🍞, kentang 🥔, dan pasta 🍝.
 
-# --- Referensi Makanan Tinggi Karbohidrat ---
-st.header("🍞 Rekomendasi Makanan Tinggi Karbohidrat")
+    **Fungsi Karbohidrat**:
+    - Sumber utama energi ⚡
+    - Membantu fungsi otak 🧠 dan saraf
+    - Menyediakan serat 🌾 untuk pencernaan
 
-st.markdown("""
-Berikut adalah beberapa makanan tinggi karbohidrat yang bisa membantu memenuhi kebutuhan harian Anda:
+    **Kebutuhan Karbohidrat Harian**:
+    Tergantung usia, jenis kelamin, berat badan, tinggi badan, dan tingkat aktivitas.
+    """)
 
-| Makanan               | Takaran            | Kandungan Karbohidrat |
-|----------------------|--------------------|------------------------|
-| Nasi putih           | 1 centong (150 g)  | ~53 gram               |
-| Kentang rebus        | 1 buah sedang (150 g) | ~30 gram            |
-| Roti tawar           | 2 lembar           | ~30 gram               |
-| Oatmeal              | 1 mangkuk (40 g)    | ~27 gram               |
-| Pisang               | 1 buah sedang      | ~27 gram               |
-| Jagung rebus         | 1 buah sedang      | ~25 gram               |
-| Singkong rebus       | 100 gram           | ~38 gram               |
-| Ubi jalar            | 100 gram           | ~20–25 gram            |
-| Mie instan matang    | 1 porsi (150 g)    | ~40–50 gram            |
-| Gula pasir           | 1 sdm              | ~13 gram               |
+# Halaman 2: Kalkulator Kebutuhan Karbohidrat
+def halaman_kalkulator():
+    add_background()
+    st.title("Kalkulator Kebutuhan Karbohidrat Harian 🍽️")
+    
+    usia = st.number_input("Masukkan usia (tahun):", min_value=1, max_value=120, value=30)
+    berat_badan = st.number_input("Masukkan berat badan (kg):", min_value=30, max_value=200, value=70)
+    tinggi_badan = st.number_input("Masukkan tinggi badan (cm):", min_value=100, max_value=250, value=170)
+    jenis_kelamin = st.selectbox("Pilih jenis kelamin:", ["Pria", "Wanita"])
+    tingkat_aktivitas = st.selectbox(
+        "Tingkat aktivitas fisik:",
+        ["Rendah (tidak aktif)", "Sedang (olahraga ringan)", "Tinggi (olahraga intensif)"]
+    )
+    
+    if jenis_kelamin == "Pria":
+        bmr = 88.362 + (13.397 * berat_badan) + (4.799 * tinggi_badan) - (5.677 * usia)
+    else:
+        bmr = 447.593 + (9.247 * berat_badan) + (3.098 * tinggi_badan) - (4.330 * usia)
+    
+    if tingkat_aktivitas == "Rendah (tidak aktif)":
+        tdee = bmr * 1.2
+    elif tingkat_aktivitas == "Sedang (olahraga ringan)":
+        tdee = bmr * 1.55
+    else:
+        tdee = bmr * 1.9
+    
+    kebutuhan_karbohidrat_kalori = tdee * 0.55
+    kebutuhan_karbohidrat_gram = kebutuhan_karbohidrat_kalori / 4
+    
+    st.subheader("Kebutuhan Karbohidrat Harian Anda:")
+    st.write(f"Kebutuhan kalori harian: **{tdee:.2f} kalori**")
+    st.write(f"Kebutuhan karbohidrat: **{kebutuhan_karbohidrat_gram:.2f} gram per hari**")
+    
+    st.subheader("Saran Makanan Harian 🍴")
+    st.write(f"Untuk memenuhi {kebutuhan_karbohidrat_gram:.2f} gram karbohidrat, Anda bisa mengonsumsi:")
+    st.markdown("""
+    1. **Nasi putih (100g)** 🍚: 28g karbohidrat  
+    2. **Roti gandum (30g)** 🍞: 15g karbohidrat  
+    3. **Kentang rebus (100g)** 🥔: 17g karbohidrat  
+    4. **Pasta (100g)** 🍝: 25g karbohidrat  
+    5. **Oatmeal (240g)** 🥣: 27g karbohidrat  
+    6. **Pisang (1 buah sedang)** 🍌: 25g karbohidrat  
+    """)
 
-💡 Tips: Pilih karbohidrat kompleks seperti oat, ubi, dan jagung untuk energi lebih stabil dan tahan lama.
-""")
-
-st.markdown("---")
-st.caption("Referensi: [Alodokter](https://www.alodokter.com/kebutuhan-karbohidrat-per-hari-dan-cara-memenuhinya) | Data makanan: USDA, FatSecret")
-
+# Menu Navigasi
+def main():
+    st.sidebar.title("Menu")
+    pilihan = st.sidebar.radio("Pilih Halaman", ["Pengertian Karbohidrat", "Kalkulator Karbohidrat"])
+    
+    if pilihan == "Pengertian Karbohidrat":
+        halaman_pengertian()
+    elif pilihan == "Kalkulator Karbohidrat":
+        halaman_kalkulator()
+    
+if __name__ == "__main__":
+    main()
